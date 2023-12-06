@@ -27,8 +27,9 @@ public class HttpSecurityConfig {
                 .authorizeHttpRequests(authReqConfig ->{
                     //urls publicas en el metodo post
                    authReqConfig.requestMatchers(HttpMethod.POST,"/customers").permitAll();
-                   authReqConfig.requestMatchers(HttpMethod.POST,"/auth/**")
-                            .permitAll();
+                   authReqConfig.requestMatchers(HttpMethod.POST,"/auth/login").permitAll();
+                   authReqConfig.requestMatchers(HttpMethod.GET,"/auth/validate").permitAll();
+
                    //el resto de endpoints necesitna ser autenticados
                    authReqConfig.anyRequest().authenticated();
                 })

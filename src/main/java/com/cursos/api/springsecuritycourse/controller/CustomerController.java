@@ -2,7 +2,7 @@ package com.cursos.api.springsecuritycourse.controller;
 
 import com.cursos.api.springsecuritycourse.dto.RegisterUserDto;
 import com.cursos.api.springsecuritycourse.dto.SaveuserDto;
-import com.cursos.api.springsecuritycourse.service.authentication.AuthenticateService;
+import com.cursos.api.springsecuritycourse.service.authentication.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CustomerController {
 
     @Autowired
-    private AuthenticateService authenticateService;
+    private AuthenticationService authenticateService;
     @PostMapping()
     public ResponseEntity<RegisterUserDto> registerUser(@RequestBody @Valid SaveuserDto newUser){
         RegisterUserDto redisterUserDto = authenticateService.registerCustomer(newUser);

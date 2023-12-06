@@ -2,20 +2,30 @@ package com.cursos.api.springsecuritycourse.service.authentication;
 
 import com.cursos.api.springsecuritycourse.dto.RegisterUserDto;
 import com.cursos.api.springsecuritycourse.dto.SaveuserDto;
+import com.cursos.api.springsecuritycourse.dto.auth.AuthenticationRequestDto;
+import com.cursos.api.springsecuritycourse.dto.auth.AuthenticationResponseDto;
 import com.cursos.api.springsecuritycourse.persistence.entity.User;
 import com.cursos.api.springsecuritycourse.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class AuthenticateService {
+public class AuthenticationService {
     @Autowired
     private UserService userService;
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     public RegisterUserDto registerCustomer(SaveuserDto newUser) {
         User user = userService.registerCustomer(newUser);
         RegisterUserDto userDto = new RegisterUserDto();
@@ -37,6 +47,34 @@ public class AuthenticateService {
         extraClaims.put("authorities",user.getAuthorities());
 
         return extraClaims;
+
+    }
+
+    public AuthenticationResponseDto login(AuthenticationRequestDto authenticationRequestDto) {
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+            authenticationRequestDto.getUsername(),authenticationRequestDto.getPassword()
+        );
+
+        authenticationManager.authenticate(authentication);
+        UserDetails user = userService.findByUsername(authenticationRequestDto.getUsername()).get();
+
+        String jwt = jwtService.generateToken(user,generateExtraClaims((User) user));
+        AuthenticationResponseDto authenticationResponseDto = new AuthenticationResponseDto();
+        authenticationResponseDto.setJwt(jwt);
+
+        return authenticationResponseDto;
+    }
+
+    public boolean validateToken(String jwt) {
+
+        try{
+            jwtService.extractUsername(jwt);
+            return true;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return false;
+        }
 
     }
 }

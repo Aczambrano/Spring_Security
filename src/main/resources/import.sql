@@ -1,3 +1,10 @@
+-- contraseñas: clave123,clave456 y clave789
+
+INSERT INTO usuario (username, name, password, role) VALUES ('lmarquez', 'luis márquez', '$2a$10$PJY1BpiHHoKEBQW9EOl3AOh96/EyIHafv3pp3TIe6TUuEXSdUvqp6', 'ROLE_CUSTOMER');
+INSERT INTO usuario (username, name, password, role) VALUES ('fperez', 'fulano pérez', '$2a$10$XCkL6/GvKmro2oIxxokPjelFlGv9mmamKD1vJtENd4j1HpuelZOai', 'ROLE_ASSISTANT_ADMINISTRATOR');
+INSERT INTO usuario (username, name, password, role) VALUES ('mhernandez', 'mengano hernández', '$2a$10$8z8Ar2tRiH0PpuQqgiL1Pend4kvVu/R.jOttjv0W8NkR187phwRcy', 'ROLE_ADMINISTRATOR');
+
+
 -- CREACIÓN DE CATEGORIAS
 INSERT INTO category (name, status) VALUES ('Electrónica', 'ENABLED');
 INSERT INTO category (name, status) VALUES ('Ropa', 'ENABLED');

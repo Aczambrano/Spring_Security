@@ -1,6 +1,7 @@
 package com.cursos.api.springsecuritycourse.service.authentication;
 
 import com.cursos.api.springsecuritycourse.persistence.entity.User;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -52,5 +53,15 @@ public class JwtService {
         //esto se hace si no tenemos codificada la clave en el application.properties
         //byte[] key = SECRET_KEY.getBytes();
         //return Keys.hmacShaKeyFor(key);
+    }
+
+    public String extractUsername(String jwt) {
+
+        return extractAllClaims(jwt).getSubject();
+    }
+
+    private Claims extractAllClaims(String jwt) {
+        return Jwts.parserBuilder().setSigningKey(generateKey()).build()
+                .parseClaimsJws(jwt).getBody();
     }
 }
